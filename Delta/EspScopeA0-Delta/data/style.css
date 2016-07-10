@@ -1,0 +1,34 @@
+.space
+{
+	width: 20px; 
+	display: inline-block
+}
+
+
+#sliders
+{
+	width: 100%;
+	text-align:	center;
+	font-family: Arial
+}
+
+#communication-diagnostics
+{
+	width: 100%;
+	text-align:	left;
+	font-family: Arial
+}
+
+#connection-status
+{
+	width: 100%;
+	text-align:	left;
+	font-family: Arial
+}
+
+#message-diagnostics
+{
+	width: 100%;
+	text-align:	left;
+	font-family: Arial
+}
