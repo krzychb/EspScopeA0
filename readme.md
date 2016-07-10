@@ -1,94 +1,84 @@
-#EspScopeA0 :construction:
+# EspScopeA0 [![Build Status](https://travis-ci.org/krzychb/EspScopeA0.svg?branch=master)](https://travis-ci.org/krzychb/EspScopeA0)
 
 This application is sampling analog input A0 of ESP8266, so it then can be displayed on-line in a web browser.
 
 Ref: https://github.com/esp8266/Arduino/issues/1634#issuecomment-192366219
 
-
-## Alfa
-File Name: EspScopeA0-Alfa.ino
-
-Features:
-* Sampling of A0 at maximum speed
-* Adjustable number of samples
-* Testing of sample rate and interference with Wi-Fi
+![Scope version Delta in Internet Explorer](Delta/pictures/web-browser-ie-scope-delta.png)
 
 
-## Bravo
-File Name: EspScopeA0-Bravo.ino
+## Introduction
 
-Features:
-* Sampling of A0 at maximum speed
-* Fixed number of samples
-* Data transfer for visualization using WebSockets
-* Use of separate web page file for visualization
+The repository itself provides seven versions of EspScopeA0 application. It is intended to walk you through development, starting from basic functionality, and ending in fully featured application optimized to display wave-forms in real-time in a web browser.
 
-
-## Charlie
-File Name: EspScopeA0-Charlie.ino
-
-Features:
-* Sampling of A0 at maximum speed
-* Adjustable number of samples
-* Adjustable sampling threshold
-* Data transfer for visualization using WebSockets
-* Use of separate web page file for visualization
+The following features are discussed and added step by step in each application version:
+1. State machine to handle data sampling
+2. Web server to visualize data on-line
+3. Web sockets to provide fast data transfer between ESP module and web browser
+4. Java Script charting library to use ready, proven and fast solution to display wave-forms
+5. Implementation of additional charts to visualize data transfer performance on-line
+6. OTA updates to make firmware updates quick and easier without serial interface
+7. Binary versus text data encoding to further speed up data transfer with web sockets
 
 
-## Delta
-File Name: [EspScopeA0-Delta.ino](https://github.com/krzychb/EspScopeA0/Delta/EspScopeA0-Delta)
+## Versions
 
-Features:
-* Sampling of A0 at maximum speed
-* Adjustable number of samples
-* Adjustable sampling threshold
-* Data transfer for visualization using WebSockets
-* Use of ESP WebSever for visualization
+I was thinking how to name each version to avoid boring numbers or letters. I liked to have them clearly identify themselves to immediately know which one is first, second, third and so on. Software versions (at least preliminary) are often called Alfa, Beta, etc. So here it comes [phonetic alphabet]( https://en.wikipedia.org/wiki/NATO_phonetic_alphabet). I hope it will not sound to militaristic to you :smile:. If this is the case, then stay tuned to my next project where I am planning to use some other variation of this naming convention. 
+
+A brief description of each version is provided below.
 
 
-## Echo
-File Name: EspScopeA0-Echo.ino
+### Alfa :construction:
 
-Features:
-* Sampling of A0 at set speed
-* Adjustable number of samples
-* Adjustable sampling threshold
-* Adjustable number of samples per second
-* Data transfer for visualization using WebSockets
-* Use of ESP WebSever for visualization
+Initial version of application providing basic functionality of reading analog input. It includes diagnostic tools to check how continuous sampling may affect Wi-Fi activity.
 
 
-## Foxtrot
-File Name: EspScopeA0-Foxtrot.ino
+### Bravo :construction:
 
-Features:
-* Sampling of A0 at set speed
-* Adjustable number of samples
-* Adjustable sampling threshold
-* Adjustable number of samples per second
-* Data transfer for visualization using WebSockets
-* Use of ESP WebSever for visualization
-* Additional chart to visualize performance
+Originally I intended to name it Beta, but then decided to stick to phonetic alphabet, so here it goes Bravo. This is essentially Alfa version extended with web sockets to transfer fixed number of samples to a web browser for displaying.
 
 
-## Golf
-File Name: EspScopeA0-Golf.ino
+### Charlie :construction:
 
-Features:
-* Sampling of A0 at set speed
-* Adjustable number of samples
-* Adjustable sampling threshold
-* Adjustable number of samples per second
-* Data transfer for visualization using WebSockets
-* Use ESP WebSever for visualization
-* Additional chart to visualize performance
-* Use binary transfer for WebSockets
-
- 
-
-## Hotel
-Spare
+This one is more fancy than Bravo and has additional functionality to setting variable number of samples and sampling threshold.
 
 
-## India
-Spare
+### [Delta](Delta)
+
+In order to make it easier to the user, Delta is first self-contained application. All the web pages are served by ESP. In previous version the pages were separate, saved and opened directly from a PC.
+
+
+### Echo :construction:
+
+This versions provides adjustable period between individual samples. So far sampling was done at maximum speed allowed by ESP hardware.
+
+
+### Foxtrot :construction:
+
+I was curious what are the factors affecting performance of EspScopeA0. For instance bigger number of samples will take longer time to transmit over Wi-Fi and process by the web browser. Also higher CPU speed of ESP8266 (you may select either 80 or 160MHz) may help to process all the data quicker. In order to measure performance I have introduced additional chart to show performance data in graphical format as opposed to numbers that may get boring.
+
+
+### Golf :construction:
+
+The last version is supposed to take advantage of binary data transfer by web sockets. Less data to transfer should improve performance. This version is also adding OTA functionality to provide firmware updates faster and in more convenient manner that using a serial port.
+
+
+## Contribute
+
+Feel free to contribute to the project in any way you like!
+If you find any issues with code or descriptions please report them using *Issues* tab above.
+
+
+## Credits
+
+Software for this project has been prepared thanks to great work of the following teams and individuals:
+* Arduino team that develops and maintains versatile [Arduino IDE](https://www.arduino.cc/)
+* esp8266/Arduino team lead by [Ivan Grokhotkov](https://twitter.com/i_grr) that brought to us excellent [ESP8266 core for Arduino](https://github.com/esp8266/Arduino)
+* [Links2004](https://twitter.com/links2004) who developed great and very reliable [arduinoWebSockets](https://github.com/Links2004/arduinoWebSockets).
+* [CanvasJS](https://twitter.com/canvasjs), developer of amazing [HTML5 JavaScript Charts](http://canvasjs.com/)
+
+
+## License
+
+[GNU LESSER GENERAL PUBLIC LICENSE - Version 2.1, February 1999](LICENSE)
+
