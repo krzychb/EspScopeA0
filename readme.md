@@ -28,7 +28,7 @@ I was thinking how to name each version to avoid boring numbers or letters. I li
 A brief description of each version is provided below.
 
 
-### Alfa :construction:
+### [Alfa](Alfa) :construction:
 
 Initial version of application providing basic functionality of reading analog input. It includes diagnostic tools to check how continuous sampling may affect Wi-Fi activity.
 
