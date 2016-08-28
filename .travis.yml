@@ -14,6 +14,7 @@ install:
   - arduino --board esp8266:esp8266:generic --save-prefs
 script:
   - arduino --verify --board esp8266:esp8266:generic $PWD/Alfa/EspScopeA0-Alfa/EspScopeA0-Alfa.ino
+  - arduino --verify --board esp8266:esp8266:generic $PWD/Bravo/EspScopeA0-Bravo/EspScopeA0-Bravo.ino
   - arduino --verify --board esp8266:esp8266:generic $PWD/Delta/EspScopeA0-Delta/EspScopeA0-Delta.ino
 notifications:
   email:
