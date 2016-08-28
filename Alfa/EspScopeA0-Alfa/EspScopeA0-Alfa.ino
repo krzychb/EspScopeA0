@@ -7,8 +7,8 @@
   Repository: https://github.com/krzychb/EspScopeA0
   Version: Alfa
   File: EspScopeA0-Alfa.ino
-  Revision: 0.1.0
-  Date: 15-Jul-2016
+  Revision: 0.1.1
+  Date: 24-Aug-2016
   Author: krzychb at gazeta.pl
 
   Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
@@ -54,7 +54,7 @@ unsigned long millisReconnected;
 #define NUMBER_OF_SAMPLES 5000  // maximum number of samples taken
 int samples[NUMBER_OF_SAMPLES];
 int numberOfSamples = 1000;
-unsigned long samplingTime = 2;  // time in us to collect all the numberOfSamples
+unsigned long samplingTime = 1;  // time in us to collect all the numberOfSamples
 int samplingPause = 3; // time in ms to pause between continuous sampling
 
 unsigned long totalSamples;
@@ -166,13 +166,13 @@ void isWiFiAlive(void)
 {
   if (WiFi.status() != WL_CONNECTED)
   {
-    Serial.print("Not connected");
+    Serial.print("Not connected ");
     while (WiFi.status() != WL_CONNECTED)
     {
       Serial.print(".");
       delay(500);
     }
-    Serial.println(" now connected back");
+    Serial.println(" now connected");
     totalSamples = 0;
     numberOfReconnects++;
     millisReconnected = millis();
@@ -184,21 +184,11 @@ void isWiFiAlive(void)
 void setup(void)
 {
   Serial.begin(115200);
-  Serial.println();
-  Serial.println("EspScopeA0-Alfa 0.1.0");
-
-  Serial.printf("Connecting to %s\n", ssid);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println();
-  Serial.print("Connected, IP address: ");
-  Serial.println(WiFi.localIP());
-
+  Serial.println("\nEspScopeA0-Alfa 0.1.1");
   Serial.println("Type h for help");
+  WiFi.persistent(false);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
 }
 
 
