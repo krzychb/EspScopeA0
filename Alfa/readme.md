@@ -60,12 +60,12 @@ samples : per s : pause ms : reconnects : connected s : avg per s
 
 The last line of help contains headers to sampling statistics:
 
-* samples - number of samples collected in one run
-* per s - sampling rate (samples / second)
-* pause ms - pause in milliseconds between sampling runs
-* reconnects - number of Wi-Fi reconnects
-* connected s - time in seconds since last reconnect
-* avg per s - average sampling rate (samples / second) including pauses and time to reconnect
+* `samples` - number of samples collected in one run
+* `per s` - sampling rate (samples / second)
+* `pause ms` - pause in milliseconds between sampling runs
+* `reconnects` - number of Wi-Fi reconnects
+* `connected s` - time in seconds since last reconnect
+* `avg per s` - average sampling rate (samples / second) including pauses and time to reconnect
 
 Sampling is done continuously without any delays in a loop to collect set number of `samples`. After completion application will wait set number of milliseconds `pause ms` and then start sampling again.
 
