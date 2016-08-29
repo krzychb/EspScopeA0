@@ -9,16 +9,16 @@ Ref: https://github.com/esp8266/Arduino/issues/1634#issuecomment-192366219
 
 ## Introduction
 
-The repository itself provides seven versions of EspScopeA0 application. It is intended to walk you through development, starting from basic functionality, and ending in fully featured application optimized to display wave-forms in real-time in a web browser.
+The repository provides seven versions of EspScopeA0 application. It is intended to walk you through development, starting from basic functionality, and ending in fully featured application optimized to display wave-forms in real-time in a web browser.
 
 The following features are discussed and added step by step in each application version:
-1. State machine to handle data sampling
-2. Web server to visualize data on-line
-3. Web sockets to provide fast data transfer between ESP module and web browser
-4. Java Script charting library to use ready, proven and fast solution to display wave-forms
-5. Implementation of additional charts to visualize data transfer performance on-line
-6. OTA updates to make firmware updates quick and easier without serial interface
-7. Binary versus text data encoding to further speed up data transfer with web sockets
+  1. State machine to handle data sampling
+  2. Web server to visualize data on-line
+  3. Web sockets to provide fast data transfer between ESP module and web browser
+  4. Java Script charting library to use ready, proven and fast solution to display wave-forms
+  5. Implementation of additional charts to visualize data transfer performance on-line
+  6. OTA updates to make firmware updates quick and easier without serial interface
+  7. Binary versus text data encoding to further speed up data transfer with web sockets
 
 
 ## Versions
@@ -28,14 +28,18 @@ I was thinking how to name each version to avoid boring numbers or letters. I li
 A brief description of each version is provided below.
 
 
-### [Alfa](Alfa) :construction:
+### Alfa
 
 Initial version of application providing basic functionality of reading analog input. It includes diagnostic tools to check how continuous sampling may affect Wi-Fi activity.
 
+[Description](Alfa) | [Sketch](Alfa/EspScopeA0-Alfa/EspScopeA0-Alfa.ino)
 
-### Bravo :construction:
+
+### Bravo
 
 Originally I intended to name it Beta, but then decided to stick to phonetic alphabet, so here it goes Bravo. This is essentially Alfa version extended with web sockets to transfer fixed number of samples to a web browser for displaying.
+
+Description :construction: | [Sketch](Bravo/EspScopeA0-Bravo/EspScopeA0-Bravo.ino)
 
 
 ### Charlie :construction:
@@ -43,9 +47,11 @@ Originally I intended to name it Beta, but then decided to stick to phonetic alp
 This one is more fancy than Bravo and has additional functionality to setting variable number of samples and sampling threshold.
 
 
-### [Delta](Delta)
+### Delta
 
 In order to make it easier to the user, Delta is first self-contained application. All the web pages are served by ESP. In previous version the pages were separate, saved and opened directly from a PC.
+
+[Description](Delta) | [Sketch](Delta/EspScopeA0-Delta/EspScopeA0-Delta.ino)
 
 
 ### Echo :construction:
@@ -81,4 +87,3 @@ Software for this project has been prepared thanks to great work of the followin
 ## License
 
 [GNU LESSER GENERAL PUBLIC LICENSE - Version 2.1, February 1999](LICENSE)
-
