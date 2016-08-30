@@ -7,8 +7,8 @@
   Repository: https://github.com/krzychb/EspScopeA0
   Version: Bravo
   File: EspScopeA0-Bravo.ino
-  Revision: 0.1.0
-  Date: 28-Aug-2016
+  Revision: 0.1.1
+  Date: 30-Aug-2016
   Author: krzychb at gazeta.pl
 
   Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
@@ -117,6 +117,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t lenght)
         char* token = strtok((char*) &payload[2], " ");
         messageNumber = (unsigned long) strtol(token, '\0', 10);
 
+        analogSample();
+
         // send the analog samples back
         String message = "# " + String(messageNumber) + " ";
         for (int i = 0; i < numberOfSamples; i++)
@@ -164,9 +166,9 @@ void checkUserInput(void)
         break;
       case 'r':
         numberOfSamples -= 5;
-        if(numberOfSamples < 1)
+        if(numberOfSamples < 5)
         {
-          numberOfSamples = 1;
+          numberOfSamples = 5;
         }
         Serial.printf("Number of samples reduced to %d\n", numberOfSamples);
         break;
@@ -196,6 +198,11 @@ void showStatistics(void)
   if(millis() > showStatisticsTimer + 5000)
   {
     showStatisticsTimer = millis();
+    if(totalSamples == 0)
+    {
+      Serial.println("No any samples collected");
+      return;
+    }
     Serial.print(numberOfSamples);
     Serial.print(" : ");
     // average number of samples per second excluding pause time
@@ -244,16 +251,12 @@ void isWiFiAlive(void)
 void setup(void)
 {
   Serial.begin(115200);
-  Serial.println("\nEspScopeA0-Bravo 0.1.0");
+  Serial.println("\nEspScopeA0-Bravo 0.1.1");
   Serial.println("Type h for help");
-  WiFi.persistent(false);
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
 
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
   Serial.println("WebSockets started");
-
 }
 
 
@@ -261,7 +264,6 @@ void loop(void)
 {
   isWiFiAlive();
   checkUserInput();
-  analogSample();
   webSocket.loop();
   showStatistics();
 }
