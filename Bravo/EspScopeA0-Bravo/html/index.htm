@@ -32,10 +32,10 @@
 <html>
 
 <head>
-<title>EspScopeA0-Bravo 0.1.0</title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<!-- get file below from http://canvasjs.com/ -->
-<script type="text/javascript" src="canvasjs.min.js"></script>
+	<title>EspScopeA0-Bravo 0.1.1</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- get file below from http://canvasjs.com/ -->
+	<script type="text/javascript" src="canvasjs.min.js"></script>
 </head>
 
 <body>
@@ -48,8 +48,7 @@
 		<div style="width: 200px; display: inline-block">Message Count: <input type="text" id="messageCount" size="6" value="-" style="border: 0" /></div>
 	</div>
 	<div id="messages">
-		<textarea id="messageWindow" rows="5" cols="75">Message here...</textarea>
-		<textarea id="diagnosticWindow" rows="5" cols="15">Diagnostic here...</textarea>
+		<textarea id="messageWindow" rows="5" cols="100">Message here...</textarea>
 	</div>
 	<div id="message-diagnostics">
 		<div style="width: 250px; display: inline-block">Message Size: <input type="text" id="messageSize" size="3" value="-" style="border: 0" />Bytes</div>
@@ -58,43 +57,33 @@
 	<br />
 	<div id="connection-status">
 		<form onsubmit="return false;">
-		<div style="width: 400px; display: inline-block">Host: <input type="text" id="hostName" value="ws://hostName:81" style="width:160px;"/><input type="button" value="Connect" onclick="connect(hostName.value)" /><input type="button" value="Disconnect" onclick="disconnect()" /></div>
-		<div style="width: 250px; display: inline-block">Status: <input type="text" id="connectionStatus" value="Idle" style="border: 0" /></div>
+		<div id="connectForm" style="width: 400px; display: inline-block">Host: <input type="text" id="hostName" value="ws://hostName:81" style="width:160px;"/><input type="button" value="Connect" onclick="connect(hostName.value)" /><input type="button" value="Disconnect" onclick="disconnect()" /></div>
 		</form>
+		<textarea id="diagnosticWindow" rows="5" cols="100"></textarea>
 	</div>
 </div>
 
 <script type="text/javascript">
-var roundtripTime = document.getElementById('roundtripTime');
-var messageCount = document.getElementById('messageCount');
+
+// update IP address of ESP8266 module
+document.getElementById('hostName').value = "ws://192.168.1.100:81";
+
+var connection;
 var messageCounter = 0;
 var messageSendMilis;
 
-var connection;
-var connectionStatus = document.getElementById('connectionStatus');
-var hostName = document.getElementById('hostName');
-var messageWindow = document.getElementById('messageWindow');
-var diagnosticWindow = document.getElementById('diagnosticWindow');
 var messageSize = document.getElementById('messageSize');
-var throughput = document.getElementById('throughput');
-var extraPayload = "";
-
-var dateObject;
-messageCount.value = messageCounter;
-// update IP address of ESP8266 module
-hostName.value = "ws://192.168.1.100:81";
+var connectForm = document.getElementById('connectForm');
 
 
-// attempt connect to sample server already on page load
-connect(hostName.value);
 
 // Chart configuration - Scope
 var scopeSamples = [];   // primary Y axis
-var chartScope;
-chartScope = new CanvasJS.Chart("chartScope",
+var chartScope = new CanvasJS.Chart("chartScope",
 {
 	title: {text: "ESP8266 Analog Input Monitor"},
 	axisX: {title: "Sample Number"},
+	axisY: {title: "A0 Counts"},
 	data: [{type: "line", dataPoints : scopeSamples}]
 });
 chartScope.render();
@@ -104,34 +93,32 @@ function connect(host)
 {
 	if(connection)
 	{
-		diagnosticWindow.value = diagnosticWindow.value + "Closed" + "\n";
+		diagnosticWindow.value = diagnosticWindow.value + "Already connected!" + "\n";
+		return;
 	}
 
-	connectionStatus.value = "Connecting..."
+	printDiag("Connecting...");
+	connectForm.style.backgroundColor = 'LightYellow';
 	connection = new WebSocket(host, ['arduino']);
 
 	connection.onopen = function()
 	{
-		connectionStatus.value = "Connected";
-		diagnosticWindow.value = "Connected" + "\n";
-		connectionStatus.style = "background-color:lightgreen";
+		printDiag("Connected");
+		connectForm.style.backgroundColor = 'GreenYellow';
 		connection.send('Hallo from Browser :-) ' + new Date());
 		sendMessage();
 	};
 
 	connection.onclose = function(event)
 	{
-		connectionStatus.value = "Disconnected";
-		connectionStatus.style = "background-color:red";
-		diagnosticWindow.value = diagnosticWindow.value + "Disconnected" + "\n";
-		connection.removeAllListeners();
+		printDiag("Disconnected");
+		connectForm.style.backgroundColor = 'LightPink';
 		connection = null;
 	};
 
 	connection.onerror = function(error)
 	{
-		console.log("WebSocket Error ", error);
-		diagnosticWindow.value = diagnosticWindow.value + "Error " + error + "\n";
+		printDiag("Error " + error);
 	};
 
 	connection.onmessage = function(message)
@@ -139,7 +126,7 @@ function connect(host)
 		var fileds = message.data.split(" ");
 
 		// show message
-		messageWindow.value = message.data;
+		document.getElementById('messageWindow').value = message.data;
 		messageSize.value = message.data.length;
 
 		// check only messages begining with '#'
@@ -151,25 +138,25 @@ function connect(host)
 			{
 				// we have received back a message
 				// with different number than just sent
-				diagnosticWindow.value = diagnosticWindow.value + "Message missed" + "\n";
+				printDiag("Message missed");
 				connection.close();
 			}
 			else
 			{
-				dateObject = new Date();
-				var rtt  = dateObject.getTime() - messageSendMilis;
-				roundtripTime.value = rtt;
+				var rtt  = new Date().getTime() - messageSendMilis;
+				document.getElementById('roundtripTime').value = rtt;
 				// calculate throughput in kB/s
 				// average roundtrip time in ms - multiply by 1000
 				// kilo Bytes - divide by 1024
 				var avgt = 0.9765 * parseInt(messageSize.value) / rtt;
-				throughput.value = avgt.toFixed(2);
+				document.getElementById('throughput').value = avgt.toFixed(2);
 
+				
 				// send another message
 				// this is assuming that processing below takes shorteer
 				// than the time for this message to bounce back
-				sendMessage();
-
+				// sendMessage();
+				
 				// update the scope chart
 				// if there are are some data received
 				var analogSamples = fileds[2].split(";");
@@ -190,6 +177,10 @@ function connect(host)
 					}
 					chartScope.render();
 				}
+				
+				// check where to execute sendMessage()
+				sendMessage();
+
 			}
 		}
 	};
@@ -203,21 +194,32 @@ function disconnect()
 	}
 	else
 	{
-		connectionStatus.value = "Not connected yet";
+		printDiag("Not connected!");
 	}
 }
 
 function sendMessage()
 {
 	messageCounter++;
-	messageCount.value = messageCounter;
-	dateObject = new Date();
-	messageSendMilis = dateObject.getTime();
+	document.getElementById('messageCount').value = messageCounter;
+	messageSendMilis = new Date().getTime();
 	//
-    // Message format
-    // # MESSAGE_NUMBER
+	// Message format
+	// # MESSAGE_NUMBER
 	//
 	connection.send("# " + messageCounter);
+}
+
+function printDiag(message)
+{
+	var diag = document.getElementById('diagnosticWindow');
+	diag.value = diag.value + new Date().timeNow() + " " + message + "\n";
+	diag.scrollTop = diag.scrollHeight;
+}
+
+
+Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
 
 </script>
