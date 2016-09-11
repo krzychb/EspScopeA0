@@ -5,10 +5,10 @@
 	Please check repository below for details
 
 	Repository: https://github.com/krzychb/EspScopeA0
-	Version: Bravo
+	Version: Charlie
 	Flie: index.htm
-	Revision: 0.1.0
-	Date: 28-Aug-2016
+	Revision: 0.1.1
+	Date: 11-Sep-2016
 	Author: krzychb at gazeta.pl
 
 	Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
@@ -32,7 +32,7 @@
 <html>
 
 <head>
-	<title>EspScopeA0-Bravo 0.1.1</title>
+	<title>EspScopeA0-Charlie 0.1.1</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<!-- get file below from http://canvasjs.com/ -->
 	<script type="text/javascript" src="canvasjs.min.js"></script>
@@ -155,7 +155,7 @@ function connect(host)
 				// send another message
 				// this is assuming that processing below takes shorteer
 				// than the time for this message to bounce back
-				// sendMessage();
+				sendMessage();
 				
 				// update the scope chart
 				// if there are are some data received
@@ -179,7 +179,7 @@ function connect(host)
 				}
 				
 				// check where to execute sendMessage()
-				sendMessage();
+				// sendMessage();
 
 			}
 		}

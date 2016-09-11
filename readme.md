@@ -30,26 +30,28 @@ A brief description of each version is provided below.
 
 ### Alfa
 
-Initial version of application providing basic functionality of reading analog input. It includes diagnostic tools to check how continuous sampling may affect Wi-Fi activity.
+Initial version of application providing basic functionality of sampling analog input with adjustable rate. It allows to check how sampling rate may affect Wi-Fi stability if connection.
 
 [Description](Alfa) | [Sketch](Alfa/EspScopeA0-Alfa/EspScopeA0-Alfa.ino)
 
 
 ### Bravo
 
-Originally I intended to name it Beta, but then decided to stick to phonetic alphabet, so here it goes Bravo. This is essentially Alfa version extended with web sockets to transfer fixed number of samples to a web browser for displaying.
+Originally I intended to name it Beta, but then decided to stick to phonetic alphabet, so here it goes Bravo. This is essentially Alfa version that automatically changes sampling rate at predefined steps. It monitors if Wi-Fi connection is not lost and saves results to [ThingSpeak](https://thingspeak.com/).
 
 Description :construction: | [Sketch](Bravo/EspScopeA0-Bravo/EspScopeA0-Bravo.ino)
 
 
-### Charlie :construction:
+### Charlie
 
-This one is more fancy than Bravo and has additional functionality to setting variable number of samples and sampling threshold.
+This is extension of [Alfa](#alfa) that is displaying collected samples in a web browser. Data are transferred from ESP to browser using web sockets.
+
+Description :construction: | [Sketch](Bravo/EspScopeA0-Bravo/EspScopeA0-Charlie.ino)
 
 
 ### Delta
 
-In order to make it easier to the user, Delta is first self-contained application. All the web pages are served by ESP. In previous version the pages were separate, saved and opened directly from a PC.
+In order to make it easier for the user, Delta is first self-contained application. All the web pages are served by ESP. In previous version the pages were separate, saved and opened directly from a PC.
 
 [Description](Delta) | [Sketch](Delta/EspScopeA0-Delta/EspScopeA0-Delta.ino)
 
