@@ -1,0 +1,98 @@
+%{
+  This is supplementary data visualization script
+  to an application the is sampling analog input A0 of ESP8266
+  so it then can be displayed on-line in a web browser
+  Application consists of several files
+  Please check repository below for details
+
+  Repository: https://github.com/krzychb/EspScopeA0
+  Version: Bravo
+  File: average-time-connected-surface-300s.mlx
+  Revision: 0.1.0
+  Date: 27-Sep-2016
+  Author: krzychb at gazeta.pl
+
+  Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+%}
+
+
+%% Data Input Parameters %%
+readChannelID = 153983; % enter your Channel ID
+readAPIKey = 'U6GWWLQRMQYPTPII'; % enter your Read API Key
+dateRange = [datetime('11-Sep-2016 15:00:00'), datetime('now')]; % enter the date and time your data starts
+
+%% Read Data %%
+SamplingPause = thingSpeakRead(readChannelID, 'Field', 7, 'DateRange', dateRange, 'ReadKey', readAPIKey);
+NumberOfSamples = thingSpeakRead(readChannelID, 'Field', 8, 'DateRange', dateRange, 'ReadKey', readAPIKey);
+TimeConnected = thingSpeakRead(readChannelID, 'Field', 5, 'DateRange', dateRange, 'ReadKey', readAPIKey);
+
+
+%% Agregate Results %%
+% megre Sampling Pause and Number of Samples into an array
+allXY = [SamplingPause, NumberOfSamples];
+
+% select all unique pairs of Sampling Pause and Number of Samples
+[unXY, unXY_idx, unXY_ord] = unique(allXY, 'rows');
+
+% calculate the mean (average) of Time Connected
+meanT = accumarray(unXY_ord, TimeConnected, [], @mean);
+
+% from the unique pairs extract column containg Sampling Pause
+X = unXY(:, 1);
+% ...  and then Number of Samples
+Y = unXY(:, 2);
+
+
+%% Show Results %%
+% select unique values of Sampling Pause and Number of Samples
+unX = unique(SamplingPause);
+unY = unique(NumberOfSamples);
+
+% double the number of points for Sampling Pause
+j = 1;
+for i = 2:length(unX)
+  nX(j) = unX(i-1);
+  j = j + 1;
+  nX(j) = (unX(i-1) + unX(i)) / 2;
+  j = j + 1;
+end
+
+% double the number of points for Number of Samples
+j = 1;
+for i = 2:length(unY)
+  nY(j) = unY(i-1);
+  j = j + 1;
+  nY(j) = (unY(i-1) + unY(i)) / 2;
+  j = j + 1;
+end
+
+% create a mesh grid
+[XI, YI] = meshgrid(nX, nY);
+
+% calculate grid data
+ZI = griddata(X, Y, meanT, XI, YI);
+% show 3d surface chart
+surf(XI, YI, ZI, 'FaceColor','interp','linestyle', 'none');
+% add labels
+title('Average Time Connected [s]')
+xlabel('Sampling Pause [ms]');
+ylabel('Number of Samples');
+zlabel('Time Connected [s]');
+
+% add color legend
+colorbar('Location', 'EastOutside')
+

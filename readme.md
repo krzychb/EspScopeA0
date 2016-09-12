@@ -1,4 +1,4 @@
-# EspScopeA0 [![Build Status](https://travis-ci.org/krzychb/EspScopeA0.svg?branch=master)](https://travis-ci.org/krzychb/EspScopeA0)
+# EspScopeA0
 
 This application is sampling analog input A0 of ESP8266, so it then can be displayed on-line in a web browser.
 
@@ -39,7 +39,7 @@ Initial version of application providing basic functionality of sampling analog 
 
 Originally I intended to name it Beta, but then decided to stick to phonetic alphabet, so here it goes Bravo. This is essentially Alfa version that automatically changes sampling rate at predefined steps. It monitors if Wi-Fi connection is not lost and saves results to [ThingSpeak](https://thingspeak.com/).
 
-Description :construction: | [Sketch](Bravo/EspScopeA0-Bravo/EspScopeA0-Bravo.ino)
+[Description](Bravo) | [Sketch](Bravo/EspScopeA0-Bravo/EspScopeA0-Bravo.ino)
 
 
 ### Charlie

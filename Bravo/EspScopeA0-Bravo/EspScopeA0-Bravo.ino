@@ -7,8 +7,8 @@
   Repository: https://github.com/krzychb/EspScopeA0
   Version: Bravo
   File: EspScopeA0-Bravo.ino
-  Revision: 0.2.1
-  Date: 11-Sep-2016
+  Revision: 0.2.4
+  Date: 21-Sep-2016
   Author: krzychb at gazeta.pl
 
   Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
@@ -54,7 +54,7 @@ extern "C" {
 // and connection time
 unsigned long numberOfReconnects;
 unsigned long millisReconnected;
-
+unsigned long timeConnected;
 //
 // Continuous sampling rate of A0 in this application is about 10 samples/ms
 // Wi-Fi connection gets stuck if continuous A0 sampling is not paused
@@ -111,7 +111,7 @@ void showStatistics(void)
     Serial.print("ms : ");
     Serial.print(numberOfReconnects);
     Serial.print(" : ");
-    long timeConnected = (millis() - millisReconnected) / 1000;
+    timeConnected = (millis() - millisReconnected) / 1000;
     Serial.print(timeConnected);
     Serial.print("s : ");
     // average number of samples per second including pause time
@@ -130,7 +130,7 @@ void logToThingSpeak(void)
   static long transmissionAttempts;
   static long replyTimeouts;
   static long connectionFailures;
-  static long postingTime = -1;
+  static long postingTime = 0;
 
   Serial.printf("DATALOG > %s ", DATA_HOST);
   // Wait if this is too soon to send data
@@ -158,10 +158,10 @@ void logToThingSpeak(void)
   client.print(
     String("GET /update?key=") + API_KEY +
           "&field1=" + String (dataLogTimer / 60000) +
-          "&field2=" + String (system_get_free_heap_size()) +
+          "&field2=" + String (postingTime) +
           "&field3=" + String (connectionFailures) +
           "&field4=" + String (numberOfReconnects) +
-          "&field5=" + String ((millis() - millisReconnected) / 1000) +
+          "&field5=" + String (timeConnected) +
           "&field6=" + String (totalSamples) +
           "&field7=" + String (samplingPause) +
           "&field8=" + String (numberOfSamples) +
@@ -177,7 +177,7 @@ void logToThingSpeak(void)
     {
       Serial.println("Reply timeout!");
       replyTimeouts++;
-      postingTime = -1;
+      postingTime = -(millis() - dataLogTimer);
       client.stop();
       return;
     }
@@ -218,6 +218,7 @@ void nextSettings(void)
 //
 void isWiFiAlive(void)
 {
+  timeConnected = (millis() - millisReconnected) / 1000;
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.print("Not connected ");
@@ -254,7 +255,7 @@ void isWiFiAlive(void)
 void setup(void)
 {
   Serial.begin(115200);
-  Serial.println("\nEspScopeA0-Bravo 0.2.1");
+  Serial.println("\nEspScopeA0-Bravo 0.2.4");
   WiFi.persistent(false);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);

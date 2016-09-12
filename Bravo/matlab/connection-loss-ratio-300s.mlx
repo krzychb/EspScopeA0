@@ -1,0 +1,74 @@
+%{
+  This is supplementary data visualization script
+  to an application the is sampling analog input A0 of ESP8266
+  so it then can be displayed on-line in a web browser
+  Application consists of several files
+  Please check repository below for details
+
+  Repository: https://github.com/krzychb/EspScopeA0
+  Version: Bravo
+  File: connection-loss-ratio-300s.mlx
+  Revision: 0.1.0
+  Date: 27-Sep-2016
+  Author: krzychb at gazeta.pl
+
+  Copyright (c) 2016 Krzysztof Budzynski. All rights reserved.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+%}
+
+
+%% Data Input Parameters %%
+readChannelID = 153983; % enter your Channel ID
+readAPIKey = 'U6GWWLQRMQYPTPII'; % enter your Read API Key
+dateRange = [datetime('11-Sep-2016 15:00:00'), datetime('now')]; % enter the date and time your data starts
+
+%% Read Data %%
+% 'NumPoints', 30
+% 'DateRange', dateRange
+TotalSamples = thingSpeakRead(readChannelID, 'Field', 6, 'DateRange', dateRange, 'ReadKey', readAPIKey);
+TimeConnected = thingSpeakRead(readChannelID, 'Field', 5, 'DateRange', dateRange, 'ReadKey', readAPIKey);
+
+% claculate sampling rate per second
+SamplingRate = TotalSamples./TimeConnected;
+% convert to kilo samples / second and round to integer value
+SamplingRate = round(SamplingRate./1000);
+
+%  
+for i=1:length(TimeConnected)
+    if TimeConnected(i) == 300;
+        ConnectionLost(i) = 1;
+    else
+        ConnectionLost(i) = 0;
+    end
+end
+
+
+% find all unique values of sampling rate
+[unX, unX_idx, unX_ord] = unique(SamplingRate);
+
+% count all measurements per each sampling rate
+CountAll = histc(SamplingRate,unX);
+% count all measurements per each sampling rate where connection has not been lost
+Count1 = accumarray(unX_ord, ConnectionLost, [], @nnz);
+
+% calculate percentages to all
+Count1 = Count1./CountAll;
+Count0 = 1 - Count1;
+
+bar(unX, Count0, 'stacked', 'r');
+title('Connection Loss Ratio')
+xlabel('Average Sampling Rate [kSamples / second]');
+ylabel('Connection Loss Ratio');
