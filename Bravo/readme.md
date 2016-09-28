@@ -1,6 +1,6 @@
 ## Bravo
 
-This application is sampling analog input A0 of ESP8266 to test how it affects Wi-Fi connection. According to issue report [#1634](https://github.com/esp8266/Arduino/issues/1634), continuous sampling of analog input causes Wi-Fi to disconnect. The test results are saved to [ThingSpeak](https://thingspeak.com/) and displayed on charts for more convenient analysis.
+This application is sampling analog input A0 of ESP8266 to test how it affects Wi-Fi connection. According to issue report [#1634](https://github.com/esp8266/Arduino/issues/1634), continuous sampling of analog input causes Wi-Fi to disconnect. The test results are saved to ThingSpeak and displayed [on charts](https://thingspeak.com/channels/153983) for more convenient analysis.
 
 Features:
 
