@@ -8,7 +8,8 @@ before_install:
   - sudo mv arduino-1.6.12 /usr/local/share/arduino
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
 install:
-  - arduino --install-library "WebSockets"
+#  - arduino --install-library "WebSockets"  // ceased to work, use direct clone of git repository
+  - git clone https://github.com/Links2004/arduinoWebSockets $HOME/Arduino/libraries/WebSockets
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
   - arduino --install-boards esp8266:esp8266
   - arduino --board esp8266:esp8266:generic --save-prefs

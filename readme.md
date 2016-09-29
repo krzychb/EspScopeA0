@@ -86,6 +86,11 @@ Software for this project has been prepared thanks to great work of the followin
 * [CanvasJS](https://twitter.com/canvasjs), developer of amazing [HTML5 JavaScript Charts](http://canvasjs.com/)
 
 
+## Build Status
+
+[![Build Status](https://travis-ci.org/krzychb/EspScopeA0.svg?branch=master)](https://travis-ci.org/krzychb/EspScopeA0)
+
+
 ## License
 
 [GNU LESSER GENERAL PUBLIC LICENSE - Version 2.1, February 1999](LICENSE)
